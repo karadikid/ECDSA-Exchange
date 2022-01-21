@@ -5,6 +5,7 @@ const port = 3042;
 const { sha256 } = require("ethereum-cryptography/sha256");
 const secp = require("ethereum-cryptography/secp256k1");
 const { hexToBytes, concatBytes, toHex, utf8ToBytes } = require("ethereum-cryptography/utils");
+const {signingOperation} = require("./libs/operations");
 
 
 // localhost can have cross origin errors
@@ -28,6 +29,8 @@ const pubkey1 = toHex(pubkeyArray1);
 const pubkey2 = toHex(pubkeyArray2);
 const pubkey3 = toHex(pubkeyArray3);
 
+//const senderPrivKey = '';
+//const senderPubkey = '';
 
 const balances = {}
 
@@ -49,7 +52,7 @@ console.log(keys);
 
 //Define functions from app.post
 //Take argument of Private Key from request body in client.index.js
-//Call sha256() hash request with private key
+//Call sha256() hash request with private key (utf8ToBytes)
 //Compare hash of private key matching to balance pubkey
 //If they match, subtract the value from pubkey balances and add to recipient key balances
 
@@ -60,8 +63,12 @@ console.log(keys);
 //function verify(signature: Uint8Array, msgHash: Uint8Array, publicKey: Uint8Array): boolean{};function verify(signature, msgHash, publicKey){};
 //function recoverPublicKey(msgHash: Uint8Array, signature: Uint8Array, recovery: number): Uint8Array | undefined{};
 //function utils.randomPrivateKey(): Uint8Array;
+// with strings
+//const { utf8ToBytes } = require("ethereum-cryptography/utils");
+//sha256(utf8ToBytes("abc"))
 
 
+/*
 (async () => {
   // You pass either a hex string, or Uint8Array
   const privateKey = "6b911fd37cdf5c81d4c0adb1ab7fa822ed253ab0ad9aa18d77257c88b29b718e";
@@ -70,20 +77,17 @@ console.log(keys);
   const signature = await secp.sign(messageHash, privateKey);
   const isSigned = secp.verify(signature, messageHash, publicKey);
 })();
-
-
-
-function hashAmount(amount) {
-  sha256(utf8ToBytes(amount));
+*/
+/*
+function receiveOperation(senderPrivKey, amount){
+    //Step 1 convert senderPrivKey to Uint32Array
+    //Step 2 Derive senderPubkey from senderPrivKey Uint32Array
+    //Step 3 hash amount
+    return;
 }
+*/
 
-function signRemote(remoteKey){
 
-}
-
-function compareSignature(){
-  //Compares signatures from both post and local
-}
 
 app.get('/balance/:address', (req, res) => {
   const {address} = req.params;
@@ -93,9 +97,11 @@ app.get('/balance/:address', (req, res) => {
 
 app.post('/send', (req, res) => {
   const {sender, recipient, amount} = req.body;
-  balances[sender] -= amount;
-  balances[recipient] = (balances[recipient] || 0) + +amount;
-  res.send({ balance: balances[sender] });
+  let signingResults = signingOperation(sender, amount);
+  console.log(signingResults);
+  //balances[sender] -= amount;
+  //balances[recipient] = (balances[recipient] || 0) + +amount;
+  //res.send({ balance: balances[sender] });
 });
 
 app.listen(port, () => {
