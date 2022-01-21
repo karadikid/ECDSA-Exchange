@@ -10,7 +10,9 @@
     "sass": "^1.26.7"
   },
   "dependencies": {
+    "@drizzle/store": "^1.5.3",
     "cors": "^2.8.5",
+    "ethereum-cryptography": "^1.0.0-rc1",
     "express": "^4.17.1"
   }
 }
