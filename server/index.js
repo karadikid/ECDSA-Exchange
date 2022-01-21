@@ -78,16 +78,19 @@ console.log(keys);
   const isSigned = secp.verify(signature, messageHash, publicKey);
 })();
 */
+
 /*
-function receiveOperation(senderPrivKey, amount){
-    //Step 1 convert senderPrivKey to Uint32Array
-    //Step 2 Derive senderPubkey from senderPrivKey Uint32Array
-    //Step 3 hash amount
-    return;
-}
+Sign message upon button.onClick();
+1. scep.sign(msgHash, privateKey,)
 */
 
-
+/*
+Verify operation on server end 
+1. Receive signed hash with message and publicKey.
+2. Run function scep.verify(signature, msgHash, publicKey)
+3. If 2. true, commit transaction.
+4. If false, return error to page.
+*/
 
 app.get('/balance/:address', (req, res) => {
   const {address} = req.params;
@@ -99,9 +102,20 @@ app.post('/send', (req, res) => {
   const {sender, recipient, amount} = req.body;
   let signingResults = signingOperation(sender, amount);
   console.log(signingResults);
+  let publicKey = secp.getPublicKey(sender);
+  // get index of balances object for publickey pos = myArray.map(function(e) { return e.hello; }).indexOf('stevie');
+  if(balances[publicKey]){
+    //Perform verification  
+    let verifiedResults = secp.verify(signature)
+    }
+    // secp.sign(msgHash, utf8ToBytes(privateKey));
+    let privateKey = utf8ToBytes(sender).toString();
+    console.log(`Sender privateKey array ${privateKey}`);
+    let signature = secp.sign((sha256(utf8ToBytes(amount), privateKey)));
+  
   //balances[sender] -= amount;
   //balances[recipient] = (balances[recipient] || 0) + +amount;
-  //res.send({ balance: balances[sender] });
+  res.send({ balance: balances[sender] });
 });
 
 app.listen(port, () => {

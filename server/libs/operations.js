@@ -3,12 +3,25 @@ const secp = require("ethereum-cryptography/secp256k1");
 const { hexToBytes, concatBytes, toHex, utf8ToBytes } = require("ethereum-cryptography/utils");
 
 
-function signingOperation(senderPrivKey, amount){
-    senderKeyArray = utf8ToBytes(senderPrivKey);
-    msgHash = sha256(utf8ToBytes(amount));
-    signature = secp.sign(senderPrivKey, msgHash);
-    return msgHash, signature;
+/*
+(async () => {
+  // You pass either a hex string, or Uint8Array
+  const privateKey = "6b911fd37cdf5c81d4c0adb1ab7fa822ed253ab0ad9aa18d77257c88b29b718e";
+  const messageHash = "a33321f98e4ff1c283c76998f14f57447545d339b3db534c6d886decb4209f28";
+  const publicKey = secp.getPublicKey(privateKey);
+  const signature = await secp.sign(messageHash, privateKey);
+  const isSigned = secp.verify(signature, messageHash, publicKey);
+})();
+*/
 
+function signingOperation(senderPrivKey, amount){
+    (async () => {
+        senderKeyArray = utf8ToBytes(senderPrivKey);
+        msgHash = sha256(utf8ToBytes(amount));
+        signature = await secp.sign(senderPrivKey, msgHash);
+        console.log(` msgHash ${msgHash} signature ${signature}`);
+        return msgHash, signature;
+      })(); 
 }
 
 module.exports = {
