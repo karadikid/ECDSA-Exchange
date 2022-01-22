@@ -103,17 +103,19 @@ app.post('/send', async (req, res) => {
   let privateKey = hexToBytes(sender);
   let signingResults = await signingOperation(sender, amount);
   let publicKey = secp.getPublicKey(privateKey);
-  console.log(publicKey);
+  //console.log(publicKey);
   // get index of balances object for publickey pos = myArray.map(function(e) { return e.hello; }).indexOf('stevie');
+  /*
   if(balances[publicKey]){
     //Perform verification  
     let verifiedResults = secp.verify(signature)
     }
-    // secp.sign(msgHash, utf8ToBytes(privateKey));
-      
-    //console.log(`Sender privateKey array ${privateKey}`);
+*/
+
+  console.log(signingResults);
   let signature = await secp.sign(sha256(utf8ToBytes(amount)), privateKey);
-  
+  //console.log(signature);
+  //let verifiedResults = secp.verify(signature, )
   //balances[sender] -= amount;
   //balances[recipient] = (balances[recipient] || 0) + +amount;
   res.send({ balance: balances[sender] });
