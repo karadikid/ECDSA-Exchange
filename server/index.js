@@ -115,7 +115,8 @@ app.post('/send', async (req, res) => {
   console.log(signingResults);
   let signature = await secp.sign(sha256(utf8ToBytes(amount)), privateKey);
   //console.log(signature);
-  //let verifiedResults = secp.verify(signature, )
+  let verifiedResults = secp.verify(signingResults[0], signingResults[1], publicKey )
+  console.log(verifiedResults);
   //balances[sender] -= amount;
   //balances[recipient] = (balances[recipient] || 0) + +amount;
   res.send({ balance: balances[sender] });
