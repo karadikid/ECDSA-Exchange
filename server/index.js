@@ -100,18 +100,19 @@ app.get('/balance/:address', (req, res) => {
 
 app.post('/send', async (req, res) => {
   const {sender, recipient, amount} = req.body;
+  let privateKey = hexToBytes(sender);
   let signingResults = await signingOperation(sender, amount);
-  console.log(signingResults);
-  let publicKey = secp.getPublicKey(sender);
+  let publicKey = secp.getPublicKey(privateKey);
+  console.log(publicKey);
   // get index of balances object for publickey pos = myArray.map(function(e) { return e.hello; }).indexOf('stevie');
   if(balances[publicKey]){
     //Perform verification  
     let verifiedResults = secp.verify(signature)
     }
     // secp.sign(msgHash, utf8ToBytes(privateKey));
-    let privateKey = hexToBytes(sender);  
+      
     //console.log(`Sender privateKey array ${privateKey}`);
-    let signature = await secp.sign((sha256(utf8ToBytes(amount), sender)));
+  let signature = await secp.sign(sha256(utf8ToBytes(amount)), privateKey);
   
   //balances[sender] -= amount;
   //balances[recipient] = (balances[recipient] || 0) + +amount;
