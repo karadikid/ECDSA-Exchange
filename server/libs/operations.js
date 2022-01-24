@@ -18,7 +18,7 @@ async function signingOperation(senderPrivKey, amount){
         senderKeyArray = utf8ToBytes(senderPrivKey);
         msgHash = sha256(utf8ToBytes(amount));
         signature = await secp.sign(senderPrivKey, msgHash);
-        return [signature, msgHash];
+        return [signature, msgHash, senderKeyArray];
 }
 
 module.exports = {

@@ -102,7 +102,7 @@ app.post('/send', async (req, res) => {
   const {sender, recipient, amount} = req.body;
   let privateKey = hexToBytes(sender);
   let signingResults = await signingOperation(sender, amount);
-  let publicKeyDerived = secp.getPublicKey(privateKey);
+  let publicKeyDerived = toHex(secp.getPublicKey(privateKey));
   let publicKey = await hexToBytes(pubkey1);
   // get index of balances object for publickey pos = myArray.map(function(e) { return e.hello; }).indexOf('stevie');
   /*
@@ -112,9 +112,9 @@ app.post('/send', async (req, res) => {
     }
 */
     //Hash is different** 20220122 - 0415
-  console.log(signingResults[0]);
+  console.log("signingResults-Signature", signingResults[0]);
   let signature = await secp.sign(sha256(utf8ToBytes(amount)), privateKey);
-  console.log(signature);
+  console.log("Server-Signature:", signature, publicKeyDerived);
   let verifiedResults = secp.verify(signingResults[0], signingResults[1], publicKey )
   //console.log(verifiedResults);
   //balances[sender] -= amount;
