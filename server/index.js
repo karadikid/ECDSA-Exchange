@@ -112,13 +112,11 @@ app.post('/send', async (req, res) => {
     }
 */
     //Hash is different** 20220122 - 0415
-  console.log("signingResults-Signature, key", signingResults[0], signingResults[1]);
   let amountMessageHash = sha256(utf8ToBytes(amount));
   let signature = await secp.sign(sha256(utf8ToBytes(amount)), sender);
-  console.log(signature, amountMessageHash);
   //console.log("Server-Signature:", signature, sha256(utf8ToBytes(amount)));
   let verifiedResults = secp.verify(signingResults[0], signingResults[1], publicKeyDerived )
-  //console.log(verifiedResults, publicKey);
+  console.log(verifiedResults, publicKey);
   //balances[sender] -= amount;
   //balances[recipient] = (balances[recipient] || 0) + +amount;
   res.send({ balance: balances[sender] });
