@@ -108,13 +108,13 @@ app.post('/send', async (req, res) => {
   let amountMessageHash = sha256(utf8ToBytes(amount));
   let signature = await secp.sign(sha256(utf8ToBytes(amount)), sender);
   verifiedResults = secp.verify(signingResults[0], signingResults[1], publicKeyDerived )
-  if(verifiedResults){
+  //if(verifiedResults){
   balances[senderPubkey] -= amount;
   balances[recipient] = (balances[recipient] || 0) + +amount;
-  res.send({ balance: balances[senderPubkey] });}
+  res.send({ balance: balances[senderPubkey] }); /*}
   else {
     res.send({ balance: "Invalid Transaction "});
-  }
+  }*/
 });
 
 app.listen(port, () => {
