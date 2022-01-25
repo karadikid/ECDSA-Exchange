@@ -45,7 +45,6 @@ const keys = {
 
 console.log(keys);
 
-
 //function getPublicKey(privateKey: Uint8Array, isCompressed?: false): Uint8Array{};
 //function getSharedSecret(privateKeyA: Uint8Array, publicKeyB: Uint8Array): Uint8Array{};
 //function sign(msgHash: Uint8Array, privateKey: Uint8Array, opts?: Options): Promise<Uint8Array>{};
@@ -55,20 +54,6 @@ console.log(keys);
 // with strings
 //const { utf8ToBytes } = require("ethereum-cryptography/utils");
 //sha256(utf8ToBytes("abc"))
-
-
-/*
-(async () => {
-  // You pass either a hex string, or Uint8Array
-  const privateKey = "6b911fd37cdf5c81d4c0adb1ab7fa822ed253ab0ad9aa18d77257c88b29b718e";
-  const messageHash = "a33321f98e4ff1c283c76998f14f57447545d339b3db534c6d886decb4209f28";
-  const publicKey = secp.getPublicKey(privateKey);
-  const signature = await secp.sign(messageHash, privateKey);
-  const isSigned = secp.verify(signature, messageHash, publicKey);
-})();
-*/
-
-
 
 app.get('/balance/:address', (req, res) => {
   const {address} = req.params;
@@ -85,7 +70,7 @@ app.post('/send', async (req, res) => {
 
   let amountMessageHash = sha256(utf8ToBytes(amount));
   let signature = await secp.sign(sha256(utf8ToBytes(amount)), sender);
-  verifiedResults = secp.verify(signingResults[0], signingResults[1], publicKeyDerived);
+  verifiedResults = secp.verify(signingResults[0], signingResults[1], senderPubkey);
   console.log(verifiedResults);
   if(verifiedResults){
   balances[senderPubkey] -= amount;
