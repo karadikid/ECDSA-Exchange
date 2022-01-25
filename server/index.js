@@ -108,9 +108,9 @@ app.post('/send', async (req, res) => {
   let amountMessageHash = sha256(utf8ToBytes(amount));
   let signature = await secp.sign(sha256(utf8ToBytes(amount)), sender);
   verifiedResults = secp.verify(signingResults[0], signingResults[1], publicKeyDerived )
-  //if(verifiedResults){
   balances[senderPubkey] -= amount;
   balances[recipient] = (balances[recipient] || 0) + +amount;
+  console.log({balance: balances[senderPubkey]});
   res.send({ balance: balances[senderPubkey] }); /*}
   else {
     res.send({ balance: "Invalid Transaction "});
