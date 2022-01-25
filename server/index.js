@@ -99,27 +99,22 @@ app.get('/balance/:address', (req, res) => {
 });
 
 app.post('/send', async (req, res) => {
-  const {sender, recipient, amount} = req.body;
-  let privateKey = hexToBytes(sender);
+  const {senderPubkey, sender, recipient, amount} = req.body;
+  let privateKey = hexToBytes(sender); //Have to use Uint8Array to derive
   let signingResults = await signingOperation(sender, amount);
   let publicKeyDerived = secp.getPublicKey(privateKey);
-  let publicKey = await hexToBytes(pubkey1);
-  // get index of balances object for publickey pos = myArray.map(function(e) { return e.hello; }).indexOf('stevie');
-  /*
-  if(balances[publicKey]){
-    //Perform verification  
-    let verifiedResults = secp.verify(signature)
-    }
-*/
-    //Hash is different** 20220122 - 0415
+  let verifiedResults;
+
   let amountMessageHash = sha256(utf8ToBytes(amount));
   let signature = await secp.sign(sha256(utf8ToBytes(amount)), sender);
-  //console.log("Server-Signature:", signature, sha256(utf8ToBytes(amount)));
-  let verifiedResults = secp.verify(signingResults[0], signingResults[1], publicKeyDerived )
-  console.log(verifiedResults, publicKey);
-  //balances[sender] -= amount;
-  //balances[recipient] = (balances[recipient] || 0) + +amount;
-  res.send({ balance: balances[sender] });
+  verifiedResults = secp.verify(signingResults[0], signingResults[1], publicKeyDerived )
+  if(verifiedResults){
+  balances[senderPubkey] -= amount;
+  balances[recipient] = (balances[recipient] || 0) + +amount;
+  res.send({ balance: balances[senderPubkey] });}
+  else {
+    res.send({ balance: "Invalid Transaction "});
+  }
 });
 
 app.listen(port, () => {
