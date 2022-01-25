@@ -5,5 +5,5 @@ Then it allows for exchanging values between the accounts signified by the publi
 ![Web Page](FrontEnd-Screenshot.jpg)
 
 ![Alavaro's Solution](Alvaraos-Solution.png)
-[Alvaro's Git](https://github.com/AlvaroLuken/exchange-secp256k1)
+[Instructos Solution](https://github.com/AlvaroLuken/exchange-secp256k1)
 
